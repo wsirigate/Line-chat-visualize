@@ -6,7 +6,7 @@ Necessary library.
 - seaborn
 
 ## How to export chat history.
-![alt text](https://github.com/wsirigate/Line-chat-analytics/blob/master/img/Line.jpg)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Line.jpg)
 
 ## Getting start.
 
@@ -28,20 +28,20 @@ Variable `df` Is the chat history data, transforms the format into a data frame 
 
 **กราฟแสดงจำนวนข้อความที่ส่งหากันในแต่ละวัน**
 
-![alt text](https://github.com/wsirigate/Line_chat_analytics/blob/master/img/Capture2.PNG)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture2.PNG)
 
 **กราฟแสดงจำนวนข้อความที่ส่งหากันโดยแบ่งตามคนส่ง**
 
-![alt text](https://github.com/wsirigate/Line_chat_analytics/blob/master/img/Capture3.PNG)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture3.png)
 
 **กราฟแสดงจำนวนข้อความที่ส่งหากันโดยแบ่งตามคนส่ง(แสดงตามเดือนที่เลือก)**
 
-![alt text](https://github.com/wsirigate/Line_chat_analytics/blob/master/img/Capture4.PNG)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture4.png)
 
 **กราฟแสดงจำนวนข้อความที่ส่งหากันทั้งหมดโดยแยกตามช่วงเวลา**
 
-![alt text](https://github.com/wsirigate/Line_chat_analytics/blob/master/img/Capture5.PNG)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture5.PNG)
 
 **กราฟแสดงวันและเวลาไหนที่มีการคส่งข้อความหากันมากที่สุด(ยิ่งสีเข้มแสดงว่ามีการส่งข้อความหากันมาก)**
 
-![alt text](https://github.com/wsirigate/Line_chat_analytics/blob/master/img/Capture6.PNG)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture6.PNG)
