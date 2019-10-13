@@ -7,7 +7,7 @@ def filter_plot(df, month_year):
     """
     Plot number of message for each user in specific month and year.
     """
-    user_day = pd.DataFrame(df.groupby(['day', 'user']).size(), columns=['count']).unstack()
+    user_day = pd.DataFrame(df.groupby(['date', 'user']).size(), columns=['count']).unstack()
     user_day.columns = user_day.columns.droplevel()
     
     lst_filter = []
@@ -28,7 +28,7 @@ def day_message(df):
     """
     number of messages each user and day. [all time]
     """
-    user_date = pd.DataFrame(df.groupby(['date', 'user']).size(), columns=['count']).unstack()
+    user_date = pd.DataFrame(df.groupby(['day', 'user']).size(), columns=['count']).unstack()
     user_date.columns = user_date.columns.droplevel()
     user_date = user_date.reindex(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
 
@@ -43,7 +43,7 @@ def day_duration(df):
     """
     Plot Which day and time that most chatting.
     """
-    gg = df.groupby(['date', 'group'])
+    gg = df.groupby(['day', 'group'])
     gg = gg.size().unstack()
     gg = gg.reindex(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
     gg = gg.fillna(0)

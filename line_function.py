@@ -40,36 +40,37 @@ def reformat(chat):
     new_format = [i.split('\t') for i in chat_reformated]
 
     # -------- Convert d/m/yyyy to dd/mm/yyyy --------
-    for l in range(len(new_format)):
-        check = new_format[l][1].split('/')
-        if len(check[0]) != 2:
-            check[0] = '0' + check[0]
-        if len(check[1]) != 2:
-            check[1] = '0' + check[1]
-        new_format[l][1] = check[0] + '/' + check[1] + '/' + check[2]
+    # for l in range(len(new_format)):
+    #     check = new_format[l][1].split('/')
+    #     if len(check[0]) != 2:
+    #         check[0] = '0' + check[0]
+    #     if len(check[1]) != 2:
+    #         check[1] = '0' + check[1]
+    #     new_format[l][1] = check[0] + '/' + check[1] + '/' + check[2]
 
     # -------- Convert A.D. to B.E. --------
-    if int(new_format[0][1][7]) > 0:
+    if int(new_format[0][1][(len(new_format[0][1])-4):][1]) > 0:
         new_format = ad_to_be(new_format)
 
     # -------- convert data to csv --------
-    date = [new_format[i][0] for i in range(len(new_format)) if len(new_format[i]) == 5]
-    day = [new_format[i][1] for i in range(len(new_format)) if len(new_format[i]) == 5]
+    day = [new_format[i][0] for i in range(len(new_format)) if len(new_format[i]) == 5]
+    date = [new_format[i][1] for i in range(len(new_format)) if len(new_format[i]) == 5]
     time = [new_format[i][2] for i in range(len(new_format)) if len(new_format[i]) == 5]
     user = [new_format[i][3] for i in range(len(new_format)) if len(new_format[i]) == 5]
     messages =[new_format[i][4] for i in range(len(new_format)) if len(new_format[i]) == 5]
 
     # -------- Create data frame. --------
-    df = pd.DataFrame({'date':date, 'time':time, 'day':day, 'user':user, 'messages':messages})
+    df = pd.DataFrame({'day':day, 'time':time, 'date':date, 'user':user, 'messages':messages})
 
     # -------- Add date_time as column. --------
-    date_time = [datetime.strptime(df['day'][i] + ' ' + df['time'][i], '%d/%m/%Y %H:%M') for i in range(len(df))]
+    date_time = [datetime.strptime(df['date'][i] + ' ' + df['time'][i], '%d/%m/%Y %H:%M') for i in range(len(df))]
     df['date_time'] = date_time
     df.drop('time', axis=1, inplace = True)
 
-    # -------- Reformat day. --------
+    # -------- Reformat day and date. --------
     for k in range(len(df)):
-        df['date'].iloc[k] = df['date_time'].iloc[k].strftime('%a')
+        df['day'].iloc[k] = df['date_time'].iloc[k].strftime('%a')
+        df['date'].iloc[k] = df['date_time'][k].strftime('%d/%m/%Y')
 
     # -------- Time binning --------
     bins = list(range(0, 25*60, 60*3))
@@ -95,13 +96,6 @@ def find_my(df):
     """
     Function find all month and year in chat.
     """
-    day = [i.split('/') for i in df['day']]
-    lst = []
-    for i in range(len(day)):
-        lst.append(day[i][1] + '/' + day[i][2])
-    lst = list(set(lst))
-    view = pd.DataFrame({'date':lst})
-    month_year = [datetime.strptime(view['date'][i],'%m/%Y') for i in range(len(view))]
-    month_year.sort()
-    month_year = [month_year[i].strftime("%m/%Y") for i in range(len(month_year))]
+    month_year = [df['date_time'][i].strftime("%m/%Y") for i in range(len(df['date_time']))]
+    month_year = list(set(month_year))
     return month_year
