@@ -10,6 +10,37 @@ def read_chat(filename):
     chat = [i.strip() for i in files]
     return chat[3:]
 
+def reformat_pc(chat):
+    """
+    This function will reformat chat history.txt that exported from PC format to data frame format.
+    """
+    new_format = []
+    keeper = ''
+    for i in chat:
+        if re.search("^[2][0][1-9][1-9].[0-1][1-9].[0-3][0-9]", i):
+            keeper = i.replace(' ', '\t', 1)
+        if re.search("^[0-2][0-9]:[0-5][0-9]", i):
+            i = i.replace(' ', '\t', 2)
+            new_format.append(keeper + '\t' + i)
+    new_format = [i.split('\t') for i in new_format]
+    # Create data frame.
+    date = [new_format[i][0] for i in range(len(new_format)) if len(new_format[i]) == 5]
+    day = [new_format[i][1] for i in range(len(new_format)) if len(new_format[i]) == 5]
+    time = [new_format[i][2] for i in range(len(new_format)) if len(new_format[i]) == 5]
+    user = [new_format[i][3] for i in range(len(new_format)) if len(new_format[i]) == 5]
+    messages =[new_format[i][4] for i in range(len(new_format)) if len(new_format[i]) == 5]
+    df = pd.DataFrame({'day':day, 'time':time, 'date':date, 'user':user, 'messages':messages})
+    # Create date time column
+    date_time = [datetime.strptime(df['date'][i] + ' ' + df['time'][i], '%Y.%m.%d %H:%M') for i in range(len(df))]
+    df['date_time'] = date_time
+    df.drop('time', axis=1, inplace = True)
+    # Reformat day and date.
+    for k in range(len(df)):
+        df['day'].iloc[k] = df['date_time'].iloc[k].strftime('%a')
+        df['date'].iloc[k] = df['date_time'][k].strftime('%d/%m/%Y')
+    df = time_binning(df)
+    return df
+
 def reformat(chat):
     """
     This function will reformat text format to data frame format.
@@ -33,27 +64,40 @@ def reformat(chat):
     else: # Thai
         for i in range(len(chat_reformated)):
             chat_reformated[i] = chat_reformated[i].replace(' ', '\t', 1)
+
     # Convert to new format
     new_format = [i.split('\t') for i in chat_reformated]
+
     # Convert A.D. to B.E.
     if int(new_format[0][1][(len(new_format[0][1])-4):][1]) > 0:
         new_format = ad_to_be(new_format)
-    # Convert data to csv
+
+    # Create data frame.
     day = [new_format[i][0] for i in range(len(new_format)) if len(new_format[i]) == 5]
     date = [new_format[i][1] for i in range(len(new_format)) if len(new_format[i]) == 5]
     time = [new_format[i][2] for i in range(len(new_format)) if len(new_format[i]) == 5]
     user = [new_format[i][3] for i in range(len(new_format)) if len(new_format[i]) == 5]
     messages =[new_format[i][4] for i in range(len(new_format)) if len(new_format[i]) == 5]
-    # Create data frame.
     df = pd.DataFrame({'day':day, 'time':time, 'date':date, 'user':user, 'messages':messages})
+
     # Add date_time as column.
+    if 0 < int(df.date[0].split('/')[1]) <= 12:
     date_time = [datetime.strptime(df['date'][i] + ' ' + df['time'][i], '%d/%m/%Y %H:%M') for i in range(len(df))]
     df['date_time'] = date_time
+    else:
+        date_time = [datetime.strptime(df['date'][i] + ' ' + df['time'][i], '%m/%d/%Y %H:%M') for i in range(len(df))]
+        df['date_time'] = date_time
     df.drop('time', axis=1, inplace = True)
+
     # Reformat day and date.
     for k in range(len(df)):
         df['day'].iloc[k] = df['date_time'].iloc[k].strftime('%a')
         df['date'].iloc[k] = df['date_time'][k].strftime('%d/%m/%Y')
+
+    df = time_binning(df)
+    return df
+
+def time_binning(df):
     # Time binning
     bins = list(range(0, 25*60, 60*3))
     labels = ['0-3', '3-6', '6-9', '9-12','12-15', '15-18', '18-21', '21-24']
@@ -63,7 +107,7 @@ def reformat(chat):
     df['group'] = pd.cut(df['minutes'], bins=bins, labels=labels)
     df.drop('minutes', axis=1, inplace = True)
     return df
-    
+
 def ad_to_be(new_format):
     """
     Convert year A.D. to B.E.
