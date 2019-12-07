@@ -6,7 +6,7 @@ Necessary library.
 - seaborn
 
 ## How to export chat history.
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Line.jpg)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture0.jpg)
 
 ## Getting start.
 
