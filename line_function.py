@@ -82,8 +82,8 @@ def reformat(chat):
 
     # Add date_time as column.
     if 0 < int(df.date[0].split('/')[1]) <= 12:
-    date_time = [datetime.strptime(df['date'][i] + ' ' + df['time'][i], '%d/%m/%Y %H:%M') for i in range(len(df))]
-    df['date_time'] = date_time
+        date_time = [datetime.strptime(df['date'][i] + ' ' + df['time'][i], '%d/%m/%Y %H:%M') for i in range(len(df))]
+        df['date_time'] = date_time
     else:
         date_time = [datetime.strptime(df['date'][i] + ' ' + df['time'][i], '%m/%d/%Y %H:%M') for i in range(len(df))]
         df['date_time'] = date_time
