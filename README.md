@@ -32,7 +32,7 @@ responsetime_df = line_function.urt(df_filter)
 # Show output.
 line_function.rpt_summary(df, responsetime_df)
 ```
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture7.png)
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture7.PNG)
 
 **กราฟแสดงจำนวนข้อความของเราและคู่สนทนา**
 
