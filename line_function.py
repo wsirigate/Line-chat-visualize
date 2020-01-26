@@ -94,6 +94,12 @@ def reformat(chat):
         df['day'].iloc[k] = df['date_time'].iloc[k].strftime('%a')
         df['date'].iloc[k] = df['date_time'][k].strftime('%d/%m/%Y')
 
+    # add column in data frame
+    month_year = [df.date_time[i].strftime("%m/%Y") for i in range(len(df))]
+    dd = [df.date_time[i].strftime("%d") for i in range(len(df))]
+    df['month_year'] = month_year
+    df['dd'] = dd
+
     df = time_binning(df)
     return df
 
@@ -105,7 +111,7 @@ def time_binning(df):
     df['minutes'] = df.date_time.dt.hour * 60 + df.date_time.dt.minute
     # add column groupto data frame
     df['group'] = pd.cut(df['minutes'], bins=bins, labels=labels)
-    df.drop('minutes', axis=1, inplace = True)
+    # df.drop('minutes', axis=1, inplace = True)
     return df
 
 def ad_to_be(new_format):
@@ -123,3 +129,77 @@ def find_my(df):
     month_year = [df['date_time'][i].strftime("%m/%Y") for i in range(len(df['date_time']))]
     month_year = list(set(month_year))
     return month_year
+
+
+def filter_my(df, month_year):
+    """
+    Function filter month year.
+    """
+    df_filter = df[df['month_year'] == month_year]
+    df_filter = df_filter.reset_index()
+    df_filter.drop('index', inplace=True, axis=1)
+    return df_filter
+
+def urt(df): #user responestime
+    """
+    Function find user respondstime
+    """
+    days = list(df.dd.value_counts().index)
+    days.sort()
+    
+    conc_user = []
+    conc_responsetime = []
+    conc_day = []
+
+    for i in days:
+        df_dayf = df[df['dd']==i] # Day filter
+        df_dayf = df_dayf.reset_index() #reset index
+        df_dayf.drop('index', inplace=True, axis=1)
+        
+        position = []
+        user = []
+        
+        counter = 0
+        for j in range(len(df_dayf)):
+            counter += 1
+            if counter == len(df_dayf):
+                break
+
+            elif df_dayf['user'][j] != df_dayf['user'][j+1]:
+                position.append(j)
+                user.append(df_dayf['user'][j])
+
+        dif_time = []
+        counter = 0
+        for k in range(len(position)):
+            counter += 1
+            if counter == len(df_dayf):
+                dif_time.append(df_dayf['minutes'][position[k]] - df_dayf['minutes'][position[k-1]])
+            elif counter != len(position):
+                dif_time.append(df_dayf['minutes'][position[k+1]] - df_dayf['minutes'][position[k]])
+        
+        conc_user += user[1:]
+        conc_responsetime += dif_time
+        conc_day += [i for q in range(len(dif_time))]
+    responsetime_df = pd.DataFrame({'user':conc_user, 'responsetime':conc_responsetime, 'day':conc_day})
+    return responsetime_df
+
+"""Function print info"""
+def resinfo(responsetime_df, user):
+    """
+    Show response time info of each user.
+    """
+    print('User name :', user)
+    print('Average response time :', responsetime_df[responsetime_df.user == user]['responsetime'].mean(), 'minutes')
+    print('Longest response time :', responsetime_df[responsetime_df.user == user]['responsetime'].max(), 'minutes')
+    print('Shotest response time :', responsetime_df[responsetime_df.user == user]['responsetime'].min(), 'minutes\n')
+
+def rpt_summary(df, responsetime_df):
+    """
+    Function respond time summary.
+    """
+    print('Responestime / user')
+    # Create list of user
+    user_list = list(df.user.value_counts().index)
+    for i in range(len(user_list)):
+        resinfo(responsetime_df ,user_list[i])
