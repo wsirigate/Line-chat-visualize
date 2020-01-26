@@ -22,6 +22,18 @@ df = line_function.reformat(chat)
 ```
 Variable `df` Is the chat history data, transforms the format into a data frame through the function `line_function.reformat()`
 
+**ข้อมูลแสดงเวลาที่ใช้ในการตอบแชท**<br>
+ข้อมูลแสดงระยะเวลาในการตอบเฉลี่ย ระยะเวลาในการตอบที่สั้นที่สุด และระยะเวลาในการตอบที่นานสุดของผู้สนทนาและคู่สนทนา
+```python
+# Choose the month and year.
+df_filter = line_function.filter_my(df, '11/2019')
+# Create dataframe of reply to chat.
+responsetime_df = line_function.urt(df_filter)
+# Show output.
+line_function.rpt_summary(df, responsetime_df)
+```
+![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture7.png)
+
 **กราฟแสดงจำนวนข้อความของเราและคู่สนทนา**
 
 ![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture1.png)
