@@ -1,7 +1,9 @@
 # Data visualization from LINE chat. :speech_balloon:
 
-Necessary library.
+Requriment.
 - pandas
+- scipy
+- datetime
 - matplotlib
 - seaborn
 
