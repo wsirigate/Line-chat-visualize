@@ -166,11 +166,10 @@ def dateFilter(data, month, year):
     """
     Filter month and year for visualization.
     """
-    data = data[np.logical_and(data.DateTime.dt.month == month, data.DateTime.dt.year == year)]
-    data = data.reset_index(drop=True)
-    
     if len(data) == 0:
         print('NOT FOUND!')
+    data = data[np.logical_and(data.DateTime.dt.month == month, data.DateTime.dt.year == year)]
+    data = data.reset_index(drop=True)
     return data
 
 def plotHeatmap(data):
@@ -213,7 +212,7 @@ def summaryInformation(data):
     plt.tight_layout()
     plt.show()
 
-def respondHist(data, bin_range):
+def respondHist(data, brange):
     """
     Plot respond time histrogram.
     """
@@ -225,7 +224,7 @@ def respondHist(data, bin_range):
         plt.figure(figsize=(10, 4))
         plt.title(user[i], fontsize=15)
         query = data.Time[data.User == user[i]]
-        plt.hist(query, bins=range(0, bin_range))
+        plt.hist(query, bins=range(0, brange))
         plt.show()
         
         print(f'User : {user[i]}')
@@ -246,7 +245,7 @@ def TrendPlot(data, method):
         trend_plot.plot(kind='bar', figsize=(8, 4))
         plt.show()
     elif method == 'Month':
-        trend_plot = pd.DataFrame(data.groupby([df.DateTime.dt.strftime('%Y / %m'), 'User']).size(), columns=['count']).unstack()
+        trend_plot = pd.DataFrame(data.groupby([data.DateTime.dt.strftime('%Y / %m'), 'User']).size(), columns=['count']).unstack()
         trend_plot.columns = trend_plot.columns.droplevel()
         trend_plot.plot(kind='bar', figsize=(20, 4))
         plt.show()
