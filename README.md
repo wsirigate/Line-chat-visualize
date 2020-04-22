@@ -8,7 +8,7 @@ Requriment.
 - seaborn
 
 ## How to export chat history.
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture0.jpg)
+![export chat history](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/export_chat_history.jpg)
 
 ## Getting start.
 
@@ -18,42 +18,15 @@ put your chat history name instead of 'LINE_Chat_with_someone.txt'
 chatName = 'LINE_Chat_with_someone.txt'
 chat_data = bf.OpenFile(chatName)
 ```
-This function `Open File()` will convert chat history into a data frame.
 
-Function `available Day(chat_data)` show available chat history date.
+`bf.summaryInformation(chat_data)` Show summary visualizes from the chat history.
+![summary plot](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/summary_plot.PNG)
 
-<!-- **ข้อมูลแสดงเวลาที่ใช้ในการตอบแชท**<br>
-ข้อมูลแสดงระยะเวลาในการตอบเฉลี่ย ระยะเวลาในการตอบที่สั้นที่สุด และระยะเวลาในการตอบที่นานสุดของผู้สนทนาและคู่สนทนา
-```python
-# Choose the month and year.
-df_filter = line_function.filter_my(df, '11/2019')
-# Create dataframe of reply to chat.
-responsetime_df = line_function.urt(df_filter)
-# Show output.
-line_function.rpt_summary(df, responsetime_df)
-```
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture7.PNG)
+`bf.availableDay(chat_data)` Show all of date in chat history.
 
-**กราฟแสดงจำนวนข้อความของเราและคู่สนทนา**
+`bf.dateFilter(data=chat_data, month=11, year=2019)` Select a specific date in chat history.
 
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture1.png)
+`bf.respondHist((filtered_data), brange=60)` Show histogram of chat respond(minute) and average respond time from each user.
+![chat respond](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/respond_hist.PNG)
 
-**กราฟแสดงจำนวนข้อความที่ส่งหากันในแต่ละวัน**
-
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture2.PNG)
-
-**กราฟแสดงจำนวนข้อความที่ส่งหากันโดยแบ่งตามคนส่ง**
-
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture3.png)
-
-**กราฟแสดงจำนวนข้อความที่ส่งหากันโดยแบ่งตามคนส่ง(แสดงตามเดือนที่เลือก)**
-
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture4.png)
-
-**กราฟแสดงจำนวนข้อความที่ส่งหากันทั้งหมดโดยแยกตามช่วงเวลา**
-
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture5.PNG)
-
-**กราฟแสดงวันและเวลาไหนที่มีการคส่งข้อความหากันมากที่สุด(ยิ่งสีเข้มแสดงว่ามีการส่งข้อความหากันมาก)**
-
-![alt text](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/Capture6.PNG) -->
+`bf.TrendPlot(filtered_data, method='Daily')` In this function you can change method in this list ['Daily', 'Weekday', 'Month']
