@@ -94,7 +94,15 @@ def getDataFrame(data):
                        'Messages':column[4]})
     df['DateTime'] = df.Date + ' ' + df.Time
     df['DateTime'] = pd.to_datetime(df.DateTime, format=('%d/%m/%Y %H:%M'))
+
+    # Remove emoji from user name.
+    username = getUser(df)
+    for user in range(len(username)):
+        df.User = df.User.replace(username[user], deEmojify(username[user]))
     return df
+
+def deEmojify(inputString):
+    return inputString.encode('ascii', 'ignore').decode('ascii')
 
 def timeBining(data, bin_range):
     """
@@ -197,14 +205,14 @@ def summaryInformation(data):
     
     plt.subplot(131)
     data.User.value_counts().plot(kind='pie', autopct='%1.0f%%')
-    plt.title('Number of conversation per user.')
+    plt.title('Conversation ratio.')
     
     plt.subplot(132)
     data.Day.value_counts().reindex(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']).plot.bar(rot=0)
     plt.title('Number of conversation per days.')
     
     plt.subplot(133)
-    data.DateTime.dt.year.value_counts().plot.bar(rot=0)
+    data.DateTime.dt.year.value_counts().sort_index().plot.bar(rot=0)
     plt.title('Number of conversation per years.')
     
     plotHeatmap(data)
@@ -233,22 +241,56 @@ def respondHist(data, brange):
 #         print('Max respond time =', data.Time[data.User == user[i]].max(), 'minute')
 
 def TrendPlot(data, method):
+    username = getUser(data)
     if method == 'Daily':
         trend_plot = pd.DataFrame(data.groupby(['Date', 'User']).size(), columns=['count']).unstack()
         trend_plot.columns = trend_plot.columns.droplevel()
-        trend_plot.plot(kind='bar', figsize=(20, 4))
+        
+        data.groupby('Date').size().plot(kind='bar', figsize=(13,4))
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.legend([username[0], username[1]])
+
+        # trend_plot.plot(kind='bar', figsize=(20, 4))
+        plt.title('The number of conversations for each user by days.')
         plt.show()
+
     elif method == 'Weekday':
+        weekday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         trend_plot = pd.DataFrame(data.groupby(['Day', 'User']).size(), columns=['count']).unstack()
         trend_plot.columns = trend_plot.columns.droplevel()
-        trend_plot = trend_plot.reindex(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
-        trend_plot.plot(kind='bar', figsize=(8, 4))
+        trend_plot = trend_plot.reindex(weekday)
+
+        data.groupby('Day').size().reindex(weekday).plot(kind='bar', figsize=(7,4))
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.legend([username[0], username[1]])
+        plt.title('The number of conversations for each user by day.')
         plt.show()
+
     elif method == 'Month':
         trend_plot = pd.DataFrame(data.groupby([data.DateTime.dt.strftime('%Y / %m'), 'User']).size(), columns=['count']).unstack()
         trend_plot.columns = trend_plot.columns.droplevel()
-        trend_plot.plot(kind='bar', figsize=(20, 4))
+
+        data.groupby(data.DateTime.dt.strftime('%Y / %m')).size().plot(kind='bar', figsize=(13,4))
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.legend([username[0], username[1]])
+        # trend_plot.plot(kind='bar', figsize=(20, 4))
+        plt.title('The number of conversations for each user by month.')
         plt.show()
+
+    elif method == 'OnTime':
+        trend_plot = pd.DataFrame(data.groupby(['Group', 'User']).size(), columns=['count']).unstack()
+        trend_plot.columns = trend_plot.columns.droplevel()
+
+        data.groupby('Group').size().plot(kind='bar', figsize=(13,4))
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.legend([username[0], username[1]])
+        plt.title('Number of conversation by time')
+        plt.show()
+
     else:
         print('Wrong method!')
-        print("Please select one of method ['Daily', 'Weekday', 'Month']")
+        print("Please select one of method ['Daily', 'Weekday', 'Month', OnTime]")
