@@ -37,25 +37,19 @@ def ChatRestr(chat):
     chat_reformated = []
     
     for i in range(len(chat)):
-        if chat[0][0] in ['M', 'T', 'W', 'T', 'F', 'S']:
-            if re.search("^[Mon, Tue, Wed, Thu, Fri, Sat, Sun]", chat[i]):
-                keep = chat[i]
-            elif chat[i] == '':
-                pass
-            else:
-                chat_reformated.append(keep + '\t' + chat[i])
-        elif chat[0][0] in ['จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส']:
-            if re.search("^[จ, อ, พ, พฤ, ศ, ส]", chat[i]):
-                keep = chat[i]
-            elif chat[i] == '':
-                pass
-            else:
-                chat_reformated.append(keep + '\t' + chat[i])
+        if re.search("^[M, T, W, T, F, S]..,", chat[i]):
+            keep = chat[i]
+        # elif re.search("^[จ, อ, พ, พฤ, ศ, ส]", chat[i]):
+        #         keep = chat[i]
+        elif chat[i] == '':
+            pass
+        else:
+            chat_reformated.append(keep + '\t' + chat[i])
                 
-    for i in range(len(chat_reformated)):
-            chat_reformated[i] = chat_reformated[i].replace(', ', '\t', 1)
+    for j in range(len(chat_reformated)):
+            chat_reformated[j] = chat_reformated[j].replace(', ', '\t', 1)
     
-    new_format = [i.split('\t') for i in chat_reformated]
+    new_format = [j.split('\t') for j in chat_reformated]
     return new_format
 
 def yearTransform(data):
@@ -67,13 +61,13 @@ def yearTransform(data):
         # Convert A.D. to B.E. format
         for i in range(len(data)):
             try:
-                if len(data[i]) == 5 or len(data[i][0]) == 3:
+                if len(data[i]) == 5 and data[i][0] in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']: # or len(data[i][0]) == 3
                     # data index count = 5 means normal situation.
                     # index 0 of data = 3 means someone unsent a message or change album name.
                     # with all of this condition still have a time value.
                     data[i][1] = data[i][1].replace(data[i][1], data[i][1][:6]+str(int(data[i][1][6:])-543))
             except:
-                print(data[i])
+                print(f'ERROR! --> {data[i]}')
 #             else:
 #                 # incase of missing time.
 #                 print(i)
@@ -107,6 +101,7 @@ def getDataFrame(data):
         df['DateTime'] = pd.to_datetime(df.DateTime, format=('%d/%m/%Y %H:%M'))
     except:
         df['DateTime'] = pd.to_datetime(df.DateTime, format=('%m/%d/%Y %H:%M'))
+        print()
 
     # Remove emoji from user name.
 #     username = getUser(df)
