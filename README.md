@@ -29,4 +29,9 @@ chat_data = bf.OpenFile(chatName)
 `bf.respondHist((filtered_data), brange=60)` Show histogram of chat respond(minute) and average respond time from each user.
 ![chat respond](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/respond_hist.jpg)
 
-`bf.TrendPlot(filtered_data, method='Daily')` In this function you can change method in this list ['Daily', 'Weekday', 'Month']
+`bf.TrendPlot(filtered_data, method='Daily')` In this function you can change method in this list ['Hourly', Daily', 'Weekly', 'Monthly']
+
+![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Timely.PNG)
+![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Daily.PNG)
+![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Weekly.PNG)
+![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Monthly.PNG)
