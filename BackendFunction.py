@@ -92,8 +92,12 @@ def getDataFrame(data):
                        'Time':column[2],
                        'User':column[3],
                        'Messages':column[4]})
+    
     df['DateTime'] = df.Date + ' ' + df.Time
-    df['DateTime'] = pd.to_datetime(df.DateTime, format=('%d/%m/%Y %H:%M'))
+    try:
+        df['DateTime'] = pd.to_datetime(df.DateTime, format=('%d/%m/%Y %H:%M'))
+    except:
+        df['DateTime'] = pd.to_datetime(df.DateTime, format=('%m/%d/%Y %H:%M'))
 
     # Remove emoji from user name.
     username = getUser(df)
