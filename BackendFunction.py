@@ -241,6 +241,9 @@ def respondHist(data, brange):
 #         print('Max respond time =', data.Time[data.User == user[i]].max(), 'minute')
 
 def TrendPlot(data, method):
+    """
+    Plot number of conversation Hourly, Daily, Weekly, Monthly.
+    """
     username = getUser(data)
     if method == 'Daily':
         trend_plot = pd.DataFrame(data.groupby(['Date', 'User']).size(), columns=['count']).unstack()
@@ -255,7 +258,7 @@ def TrendPlot(data, method):
         plt.title('The number of conversations for each user by days.')
         plt.show()
 
-    elif method == 'Weekday':
+    elif method == 'Weekly':
         weekday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         trend_plot = pd.DataFrame(data.groupby(['Day', 'User']).size(), columns=['count']).unstack()
         trend_plot.columns = trend_plot.columns.droplevel()
@@ -268,7 +271,7 @@ def TrendPlot(data, method):
         plt.title('The number of conversations for each user by day.')
         plt.show()
 
-    elif method == 'Month':
+    elif method == 'Monthly':
         trend_plot = pd.DataFrame(data.groupby([data.DateTime.dt.strftime('%Y / %m'), 'User']).size(), columns=['count']).unstack()
         trend_plot.columns = trend_plot.columns.droplevel()
 
@@ -280,7 +283,7 @@ def TrendPlot(data, method):
         plt.title('The number of conversations for each user by month.')
         plt.show()
 
-    elif method == 'OnTime':
+    elif method == 'Hourly':
         trend_plot = pd.DataFrame(data.groupby(['Group', 'User']).size(), columns=['count']).unstack()
         trend_plot.columns = trend_plot.columns.droplevel()
 

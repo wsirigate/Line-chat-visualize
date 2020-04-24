@@ -27,6 +27,6 @@ chat_data = bf.OpenFile(chatName)
 `bf.dateFilter(data=chat_data, month=11, year=2019)` Select a specific date in chat history.
 
 `bf.respondHist((filtered_data), brange=60)` Show histogram of chat respond(minute) and average respond time from each user.
-![chat respond](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/respond_hist.PNG)
+![chat respond](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/respond_hist.jpg)
 
 `bf.TrendPlot(filtered_data, method='Daily')` In this function you can change method in this list ['Daily', 'Weekday', 'Month']
