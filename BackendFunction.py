@@ -37,15 +37,21 @@ def ChatRestr(chat):
     chat_reformated = []
     
     for i in range(len(chat)):
-        if re.search("^[M, T, W, T, F, S]", chat[i]):
-            keep = chat[i]
-        elif re.search("^[จ, อ, พ, พฤ, ศ, ส]", chat[i]):
-            keep = chat[i]
-        elif chat[i] == '':
-            pass
-        else:
-            chat_reformated.append(keep + '\t' + chat[i])
-            
+        if chat[0][0] in ['M', 'T', 'W', 'T', 'F', 'S']:
+            if re.search("^[Mon, Tue, Wed, Thu, Fri, Sat, Sun]", chat[i]):
+                keep = chat[i]
+            elif chat[i] == '':
+                pass
+            else:
+                chat_reformated.append(keep + '\t' + chat[i])
+        elif chat[0][0] in ['จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส']:
+            if re.search("^[จ, อ, พ, พฤ, ศ, ส]", chat[i]):
+                keep = chat[i]
+            elif chat[i] == '':
+                pass
+            else:
+                chat_reformated.append(keep + '\t' + chat[i])
+                
     for i in range(len(chat_reformated)):
             chat_reformated[i] = chat_reformated[i].replace(', ', '\t', 1)
     
@@ -60,11 +66,14 @@ def yearTransform(data):
     if int(data[0][1][(len(data[0][1])-4):][1]) >= 5: # Check A.D.
         # Convert A.D. to B.E. format
         for i in range(len(data)):
-            if len(data[i]) == 5 or len(data[i][0]) == 3:
-                # data index count = 5 means normal situation.
-                # index 0 of data = 3 means someone unsent a message or change album name.
-                # with all of this condition still have a time value.
-                data[i][1] = data[i][1].replace(data[i][1], data[i][1][:6]+str(int(data[i][1][6:])-543))
+            try:
+                if len(data[i]) == 5 or len(data[i][0]) == 3:
+                    # data index count = 5 means normal situation.
+                    # index 0 of data = 3 means someone unsent a message or change album name.
+                    # with all of this condition still have a time value.
+                    data[i][1] = data[i][1].replace(data[i][1], data[i][1][:6]+str(int(data[i][1][6:])-543))
+            except:
+                print(data[i])
 #             else:
 #                 # incase of missing time.
 #                 print(i)
@@ -100,13 +109,13 @@ def getDataFrame(data):
         df['DateTime'] = pd.to_datetime(df.DateTime, format=('%m/%d/%Y %H:%M'))
 
     # Remove emoji from user name.
-    username = getUser(df)
-    for user in range(len(username)):
-        df.User = df.User.replace(username[user], deEmojify(username[user]))
+#     username = getUser(df)
+#     for user in range(len(username)):
+#         df.User = df.User.replace(username[user], deEmojify(username[user]))
     return df
 
-def deEmojify(inputString):
-    return inputString.encode('ascii', 'ignore').decode('ascii')
+# def deEmojify(inputString):
+#     return inputString.encode('ascii', 'ignore').decode('ascii')
 
 def timeBining(data, bin_range):
     """
