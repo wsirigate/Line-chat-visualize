@@ -31,7 +31,14 @@ chat_data = bf.OpenFile(chatName)
 
 `bf.TrendPlot(filtered_data, method='Daily')` In this function you can change method in this list ['Hourly', Daily', 'Weekly', 'Monthly']
 
+`bf.TrendPlot(filtered_data, method='Hourly')`
 ![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Timely.PNG)
+
+`bf.TrendPlot(filtered_data, method='Daily')`
 ![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Daily.PNG)
+
+`bf.TrendPlot(filtered_data, method='Weekly')`
 ![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Weekly.PNG)
+
+`bf.TrendPlot(filtered_data, method='Monthly')`
 ![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Monthly.PNG)
