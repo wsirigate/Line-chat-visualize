@@ -1,12 +1,5 @@
 # Data visualization from LINE chat. :speech_balloon:
 
-Requriment.
-- pandas
-- scipy
-- datetime
-- matplotlib
-- seaborn
-
 ## How to export chat history.
 ![export chat history](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/export_chat_history.jpg)
 
