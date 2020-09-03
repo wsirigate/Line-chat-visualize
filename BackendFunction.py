@@ -5,11 +5,17 @@ import re
 import numpy as np
 import pandas as pd
 import matplotlib as mpl
-from datetime import datetime
-from scipy.stats import zscore
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set()
+
+from datetime import datetime
+from scipy.stats import zscore
+
 mpl.rcParams['font.family'] = 'Tahoma'
+# sns.set_palette(sns.color_palette("Set3", 10))
+
+colors = ["#2d63a7", "#F2786D", "#16345a", "#731817", "#ee5152"]
+sns.set_palette(colors)
 
 def OpenFile(filename):
     """
@@ -21,6 +27,7 @@ def OpenFile(filename):
     df = timeBining(data=df, bin_range=1)
     return df
 
+
 def ReadChat(file_name):
     """
     Read file.
@@ -29,6 +36,7 @@ def ReadChat(file_name):
     chat = [i.strip() for i in file]
     chat = chat[3:]
     return chat
+
 
 def ChatRestr(chat):
     """
@@ -51,6 +59,7 @@ def ChatRestr(chat):
     
     new_format = [j.split('\t') for j in chat_reformated]
     return new_format
+
 
 def yearTransform(data):
     """
@@ -77,6 +86,7 @@ def yearTransform(data):
 #             # incase of missing time.
 #                 print(data[i], '\n')
     return data
+
 
 def getDataFrame(data):
     """
@@ -127,6 +137,7 @@ def timeBining(data, bin_range):
     data['MessageTime'] = (data.DateTime.dt.hour * 60) + (data.DateTime.dt.minute)
     return data
 
+
 def chatResTime(data):
     """
     Find chat respond time.
@@ -156,11 +167,13 @@ def chatResTime(data):
     chatRespond_df['Time'] = time
     return chatRespond_df
 
+
 def getUser(data):
     """
     Get all user in chat history
     """
-    return list(data.User.unique())
+    return sorted(list(data.User.unique()))
+
 
 def rmOutlier(data, col_name):
     """
@@ -172,11 +185,13 @@ def rmOutlier(data, col_name):
     data = data[filtered]
     return data
 
+
 def availableDay(data):
     """
     Show available day in chat history.
     """
     return set([i[6:]+'/'+i[3:5] for i in data.Date.unique()])
+
 
 def dateFilter(data, month, year):
     """
@@ -187,6 +202,7 @@ def dateFilter(data, month, year):
     data = data[np.logical_and(data.DateTime.dt.month == month, data.DateTime.dt.year == year)]
     data = data.reset_index(drop=True)
     return data
+
 
 def plotHeatmap(data):
     """
@@ -201,8 +217,9 @@ def plotHeatmap(data):
     plt.figure(figsize=(15,5))
     plt.title(data.Date[0]+' - '+list(data.Date)[-1:][0])
     
-    ax = sns.heatmap(group, cmap="YlGnBu", annot=True, fmt='.0f')
+    ax = sns.heatmap(group, cmap="YlGnBu", annot=True, fmt='.0f') # YlGnBu
     plt.show()
+
 
 def summaryInformation(data):
     """
@@ -228,6 +245,7 @@ def summaryInformation(data):
     plt.tight_layout()
     plt.show()
 
+
 def respondHist(data, brange):
     """
     Plot respond time histrogram.
@@ -248,6 +266,7 @@ def respondHist(data, brange):
         print('Min respond time =', data.Time[data.User == user[i]].min(), 'minute')
 #         print('Max respond time =', data.Time[data.User == user[i]].max(), 'minute')
 
+
 def TrendPlot(data, method):
     """
     Plot number of conversation Hourly, Daily, Weekly, Monthly.
@@ -258,8 +277,8 @@ def TrendPlot(data, method):
         trend_plot.columns = trend_plot.columns.droplevel()
         
         data.groupby('Date').size().plot(kind='bar', figsize=(13,4))
-        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
-        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#F2786D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#F2AF5C')
         plt.legend([username[0], username[1]])
 
         # trend_plot.plot(kind='bar', figsize=(20, 4))
@@ -273,8 +292,8 @@ def TrendPlot(data, method):
         trend_plot = trend_plot.reindex(weekday)
 
         data.groupby('Day').size().reindex(weekday).plot(kind='bar', figsize=(7,4))
-        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
-        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#F2786D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#F2AF5C')
         plt.legend([username[0], username[1]])
         plt.title('The number of conversations for each user by day.')
         plt.show()
@@ -284,8 +303,8 @@ def TrendPlot(data, method):
         trend_plot.columns = trend_plot.columns.droplevel()
 
         data.groupby(data.DateTime.dt.strftime('%Y / %m')).size().plot(kind='bar', figsize=(13,4))
-        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
-        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#F2786D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#F2AF5C')
         plt.legend([username[0], username[1]])
         # trend_plot.plot(kind='bar', figsize=(20, 4))
         plt.title('The number of conversations for each user by month.')
@@ -296,8 +315,8 @@ def TrendPlot(data, method):
         trend_plot.columns = trend_plot.columns.droplevel()
 
         data.groupby('Group').size().plot(kind='bar', figsize=(13,4))
-        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#FFA05D')
-        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#52B385')
+        plt.plot(trend_plot[username[0]], marker='o', linestyle = '--', color='#F2786D')
+        plt.plot(trend_plot[username[1]], marker='o', linestyle = '--', color='#F2AF5C')
         plt.legend([username[0], username[1]])
         plt.title('Number of conversation by time')
         plt.show()
