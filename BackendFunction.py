@@ -175,17 +175,6 @@ def getUser(data):
     return sorted(list(data.User.unique()))
 
 
-def rmOutlier(data, col_name):
-    """
-    Remove outlier
-    """
-    z_scores = zscore(data[col_name])
-    z_scores = np.abs(z_scores)
-    filtered = (z_scores < 3)
-    data = data[filtered]
-    return data
-
-
 def availableDay(data):
     """
     Show available day in chat history.
@@ -251,7 +240,7 @@ def respondHist(data, brange):
     Plot respond time histrogram.
     """
     data = chatResTime(data)
-    data = rmOutlier(data, 'Time')
+    # data = rmOutlier(data, 'Time')
     
     user = getUser(data)
     for i in range(len(user)):
