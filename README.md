@@ -1,35 +1,43 @@
 # Data visualization from LINE chat. :speech_balloon:
 
 ## How to export chat history.
-![export chat history](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/export_chat_history.jpg)
+![export chat history](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/export_chat.png)
+hamburger menu icon -> Oter settings -> Export chat history -> sent!
 
 ## Getting start.
 
-run this file `Line-Visualization.ipynb`
+Run this file `Line-Visualization.ipynb`
 put your chat history name instead of 'LINE_Chat_with_someone.txt'
 ```python
-chatName = 'LINE_Chat_with_someone.txt'
-chat_data = bf.OpenFile(chatName)
+# Read chat file
+df = Open('LINE_Chat_with_someone.txt').data()
+# Use for visulize the data
+chat = getInformation(df)
 ```
 
-`bf.summaryInformation(chat_data)` Show summary visualise from the chat history.
-![summary plot](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/summary_plot.PNG)
+Use `chat.summary()` to show summary information from the chat history.
+```python
+chat.summary()
+```
+![summary plot](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/summary.png)
 
-`bf.availableDay(chat_data)` Show all of date in chat history.
+Use `chat.activity()` to show activity by time
+```python
+chat.activity()
+```
+![summary plot](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/heatmap.png)
+![summary plot](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/polar.png)
 
-`bf.dateFilter(data=chat_data, month=11, year=2019)` Select a specific date in chat history.
+```python
+chat.chronological()
+```
+![summary plot](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/chronological.png)
 
-`bf.respondHist((filtered_data), brange=60)` Show histogram of chat respond(minute) and average respond time from each user.
-![chat respond](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/respond_hist.jpg)
+by the way you also can customize the start date and end date by using this parameter `chat.activity(custom=True, start='dd-mm-yyyy', end='dd-mm-yyyy')`
+```python
+# customize time window
+chat.activity(custom=True, start='01-08-2020', end='30-12-2020')
 
-`bf.TrendPlot(filtered_data, method='Hourly')` Show visualise of total number of chat by time.
-![TrendPlot Timely](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Timely.PNG)
-
-`bf.TrendPlot(filtered_data, method='Daily')` Show visualise of total number of chat by days.
-![TrendPlot Daily](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Daily.PNG)
-
-`bf.TrendPlot(filtered_data, method='Weekly')` Show visualise of total number of chat by weekday.
-![TrendPlot Weekly](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Weekly.PNG)
-
-`bf.TrendPlot(filtered_data, method='Monthly')` Show visualise of total number of chat by month.
-![TrendPlot Monthly](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/TrendPlot_Monthly.PNG)
+chat.chronological(custom=True, start='01-08-2020', end='31-12-2020')
+```
+![summary plot](https://github.com/wsirigate/Line_chat_visualize/blob/master/img/chronological_custom.png)
