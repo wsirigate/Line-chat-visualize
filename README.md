@@ -1,4 +1,4 @@
-# Data visualization from LINE chat. :speech_balloon:
+# LINE Chatvisualizer :speech_balloon:
 
 ## How to export chat history.
 ![export chat history](https://github.com/wsirigate/Line-chat-visualize/blob/c2755b20a99c7184afa3d034c8651da02c3826fd/img/export_chat.png)
